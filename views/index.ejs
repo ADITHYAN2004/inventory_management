@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+   <link rel="stylesheet" href="/css/styles.css">
+   <link rel="stylesheet" href="/css/navStyle.css"> 
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">KOLLAMPARAMBIL AGENESIS</div>
+            
+            <div class="navbar-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            
+            <ul class="navbar-menu">
+                <li class="navbar-item">
+                    <a href="/" class="navbar-link">Home</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/chart" class="navbar-link">Chart</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/about" class="navbar-link">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <header>
+            <h2>INVENTORY MANAGEMENT SYSTEM</h2>
+        </header>
+        
+        <section class="add-item-section">
+            <h2>Add New Item Type</h2>
+            <form action="/add-itemType" method="post" class="add-form">
+                <input type="text" name="itemName" class="itemName" placeholder="Enter item name" required>
+                <input type="submit" value="Add Type" class="submit-btn">
+            </form>
+        </section>
+        
+        <section class="item-types-section">
+            <% if(itemType.length!= 0){ %>
+            <h2>Available Item Types</h2>
+            <div class="item-grid">
+                <% itemType.forEach(function (val) { %>
+                    <a href="/items/<%= val.itemType %>" class="item-card">
+                        <div class="item-icon">📦</div>
+                        <div class="item-name"><%= val.itemType %></div>
+                        <div class="item-action">View Details →</div>
+                        <div class="item-del-edit">
+                            <div class="btn-action delete-btn" title="Delete" onclick="openDeleteModal('<%= val.itemType %>','<%= val._id %>', event)">🗑️</div>
+                            <div class="btn-action edit-btn" title="Edit" onclick="openEditModal('<%= val.itemType %>','<%= val._id %>', event)">Edit</div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+            <% } else { %>
+                <h2>You need to add type to viwe it</h2>
+            <% } %>
+        </section>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <span class="close-btn" onclick="closeDeleteModal()">&times;</span>
+            </div>
+            <p>Are you sure you want to delete <span id="deleteItemName"></span>?</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" id="deleteItemInput" name="itemType">
+                    <button type="submit" class="modal-btn delete-confirm-btn">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Item Type</h3>
+                <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            </div>
+            <form id="editForm" method="post" class="edit-form">
+                <input type="hidden" id="originalItemName" name="originalItemType">
+                <input type="text" id="newItemName" name="newItemType" placeholder="Enter new name" required>
+                <div class="modal-actions">
+                    <button type="button" class="modal-btn cancel-btn" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="modal-btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navbarMenu = document.querySelector('.navbar-menu');
+        
+        mobileMenu.addEventListener('click', function() {
+            navbarMenu.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Delete modal functionality
+        function openDeleteModal(itemName,id, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const modal = document.getElementById('deleteModal');
+            const itemNameSpan = document.getElementById('deleteItemName');
+            const itemInput = document.getElementById('deleteItemInput');
+            const deletItem =document.getElementById('deleteForm')
+            
+            deletItem.action=`/delete-itemType/${id}`
+            itemNameSpan.textContent = itemName;
+            itemInput.value = itemName;
+            modal.style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'none';
+        }
+
+        // Edit modal functionality
+        function openEditModal(itemName, _id, event) {
+            event.preventDefault();
+            event.stopPropagation();
+            const modal = document.getElementById('editModal');
+            const originalItemInput = document.getElementById('originalItemName');
+            const newItemInput = document.getElementById('newItemName');
+            const editAction = document.getElementById('editForm')
+            
+            editAction.action=`/edit-itemType/${_id}`
+            originalItemInput.value = itemName;
+            newItemInput.value = itemName;
+            modal.style.display = 'block';
+        }
+
+        function closeEditModal() {
+            const modal = document.getElementById('editModal');
+            modal.style.display = 'none';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            const editModal = document.getElementById('editModal');
+            
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+            
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+        }
+    </script>
+</body>
+</html>

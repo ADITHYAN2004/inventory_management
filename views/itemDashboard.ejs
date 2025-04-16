@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= type %> Inventory Dashboard</title>
+  <link rel="stylesheet" href="/css/navStyle.css">
+  <link rel="stylesheet" href="/css/dashboardStyle.css">
+
+  
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-container">
+      <div class="navbar-logo">KOLLAMPARAMBIL AGENESIS</div>
+      
+      <div class="navbar-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      
+      <ul class="navbar-menu">
+        <li class="navbar-item">
+          <a href="/" class="navbar-link">Home</a>
+        </li>
+        <li class="navbar-item">
+          <a href="/chart" class="navbar-link">Chart</a>
+        </li>
+        <li class="navbar-item">
+          <a href="/about" class="navbar-link">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="dashboard">
+    <div class="dashboard-header">
+      <h1 class="page-title"><%= type %> Inventory</h1>
+      <button class="add-btn" id="showAddFormBtn">Add Item</button>
+    </div>
+    
+    <!-- Summary Stats -->
+    <div class="dashboard-stats">
+      <div class="stat-card">
+        <div class="stat-title">Total Items</div>
+        <div class="stat-value"><%= item.length %></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Total Quantity</div>
+        <div class="stat-value">
+          <%= item.reduce((sum, val) => sum + Number(val.numberOfItem || 0), 0) %>
+        </div>
+      </div>
+    
+    </div>
+    
+    <div class="inventory-section">
+      <div class="section-header">
+        <h2 class="section-title">Inventory Items</h2>
+      </div>
+      
+      <!-- Empty State -->
+      <% if(item.length === 0) { %>
+        <div class="empty-state">
+          <h1>No items yet</h1>
+          <p>Click the Add Item button to start tracking your inventory.</p>
+        </div>
+      <% } else { %>
+        <!-- Inventory Grid -->
+        <div class="inventory-grid">
+          <% item.forEach(function(val) { %>
+            <div class="item-card" data-id="<%= val._id %>">
+              <div class="item-header">
+                <h3 class="item-name"><%= val.itemName %></h3>
+                <div class="item-actions">
+                  <button class="edit-btn" onclick="showEditForm('<%= val._id %>', '<%= val.itemName %>', '<%= val.numberOfItem %>', '<%= val.price_oneitem %>')">✏️</button>
+                  <button class="delete-btn" onclick="showDeleteConfirm('<%= val._id %>', '<%= val.itemName %>')">🗑️</button>
+                </div>
+              </div>
+              <div class="item-content">
+                <div class="item-stat">
+                  <span class="stat-label">QUANTITY</span>
+                  <div class="quantity-display">
+                    <div class="quantity-badge"><%= val.numberOfItem %></div>
+                    <div class="quantity-text">units in stock</div>
+                  </div>
+                </div>
+                <% if (val.amount) { %>
+                <div class="item-stat">
+                  <span class="stat-label">PRICE PER UNIT</span>
+                  <div class="price-value"><%= val.amount %></div>
+                </div>
+                <div class="item-stat">
+                  <span class="stat-label">TOTAL VALUE</span>
+                  <div class="price-value"><%= (val.numberOfItem * val.amount).toFixed(2) %></div>
+                  <span class="stat-label">TOTAL NUMBER OF ITEM USED</span>
+                  <div class="item-used"><%= val.numberOfItemUsed_tot %></div>
+                </div>
+                <% } %>
+                <div class="timestamp">Added on <%= new Date(val.date).toLocaleDateString() %></div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+    </div>
+  </div>
+  
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+  
+  <!-- Add Form Modal -->
+  <div class="modal" id="addForm">
+    <div class="modal-header">
+      <div class="modal-title">Add New Item</div>
+      <button class="close-btn" id="closeAddFormBtn">&times;</button>
+    </div>
+    <form action="/add-items/<%= type %>" method="POST">
+      <div class="form-group">
+        <label for="itemName">Item Name</label>
+        <input type="text" class="form-control" id="itemName" name="itemName" placeholder="Enter item name" required>
+      </div>
+      <div class="form-group">
+        <label for="numberOfItem">Quantity</label>
+        <input type="number" class="form-control" id="numberOfItem" name="numberOfItem" placeholder="Enter quantity" required>
+      </div>
+      <div class="form-group">
+        <label for="price_oneitem">Price Per Item</label>
+        <input type="number" class="form-control" id="price_oneitem" name="price_oneitem" placeholder="Enter price" step="0.01">
+      </div>
+      <button type="submit" class="submit-btn">Add Item</button>
+    </form>
+  </div>
+  
+  <!-- Edit Form Modal -->
+  <div class="modal" id="editForm">
+    <div class="modal-header">
+      <div class="modal-title">Edit Item</div>
+      <button class="close-btn" id="closeEditFormBtn">&times;</button>
+    </div>
+    <form id="editItemForm" method="POST">
+      <input type="hidden" id="editItemId" name="itemId">
+      <div class="form-group">
+        <label for="editItemName">Item Name</label>
+        <input type="text" class="form-control" id="editItemName" name="itemName" required>
+      </div>
+      <div class="form-group">
+        <label for="editNumberOfItem">Quantity Used</label>
+        <input type="number" class="form-control" id="editNumberOfItem" name="numberOfItem_used" >
+      </div>
+     <div>
+      <label for="editNumberOfItem">Quantity Added</label>
+        <input type="number" class="form-control" id="editNumberOfItem" name="numberOfItem_Added" >
+     </div>
+      <div class="form-group">
+        <label for="editPrice">Price Per Item</label>
+        <input type="number" class="form-control" id="editPrice" name="price_oneitem" step="0.01">
+      </div>
+      <button type="submit" class="submit-btn">Update Item</button>
+    </form>
+  </div>
+  
+  <!-- Delete Confirmation Dialog -->
+  <div class="confirm-dialog" id="deleteConfirm">
+    <div class="confirm-title">Delete Item</div>
+    <div class="confirm-message" id="deleteMessage"></div>
+    <div class="confirm-actions">
+      <button class="cancel-btn" id="cancelDeleteBtn">Cancel</button>
+      <form id="deleteItemForm" method="POST">
+        <input type="hidden" id="deleteItemId" name="itemId">
+        <button type="submit" class="confirm-delete-btn">Delete</button>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    // Show/hide add form
+    const showAddFormBtn = document.getElementById('showAddFormBtn');
+    const closeAddFormBtn = document.getElementById('closeAddFormBtn');
+    const addForm = document.getElementById('addForm');
+    const overlay = document.getElementById('overlay');
+    
+    showAddFormBtn.addEventListener('click', function() {
+      addForm.style.display = 'block';
+      overlay.style.display = 'block';
+    });
+    
+    closeAddFormBtn.addEventListener('click', function() {
+      addForm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+    
+    // Edit form functionality
+    const editForm = document.getElementById('editForm');
+    const closeEditFormBtn = document.getElementById('closeEditFormBtn');
+    const editItemForm = document.getElementById('editItemForm');
+    
+    function showEditForm(id, name, quantity, price) {
+      document.getElementById('editItemId').value = id;
+      document.getElementById('editItemName').value = name;
+      
+      document.getElementById('editPrice').value = price || '';
+      
+      editItemForm.action = `/edit-item/${id}`;
+      editForm.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+    
+    closeEditFormBtn.addEventListener('click', function() {
+      editForm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+    
+    // Delete confirmation functionality
+    const deleteConfirm = document.getElementById('deleteConfirm');
+    const deleteMessage = document.getElementById('deleteMessage');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const deleteItemForm = document.getElementById('deleteItemForm');
+    
+    function showDeleteConfirm(id, name) {
+      document.getElementById('deleteItemId').value = id;
+      deleteMessage.textContent = `Are you sure you want to delete "${name}"?`;
+      
+      deleteItemForm.action = `/delete-item/${id}`;
+      deleteConfirm.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+    
+    cancelDeleteBtn.addEventListener('click', function() {
+      deleteConfirm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+    
+    // Close modals when clicking outside
+    overlay.addEventListener('click', function() {
+      addForm.style.display = 'none';
+      editForm.style.display = 'none';
+      deleteConfirm.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

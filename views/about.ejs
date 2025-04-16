@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Inventory Manager</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-indigo-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-boxes text-2xl"></i>
+                    </div>
+                    <div class="ml-4 text-xl font-bold">Inventory Manager</div>
+                </div>
+                <div class="flex">
+                    <a href="/" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-indigo-500">Home</a>
+                    <a href="/about" class="px-3 py-2 rounded-md text-sm font-medium bg-indigo-700">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow overflow-hidden rounded-lg">
+            <div class="px-4 py-5 sm:px-6 bg-indigo-50">
+                <h1 class="text-3xl font-bold text-indigo-800">About Inventory Manager</h1>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500">Learn more about this application and how to use it</p>
+            </div>
+            <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                <div class="prose max-w-none">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">What is Inventory Manager?</h2>
+                    <p class="mb-4">
+                        Inventory Manager is a simple but powerful web application designed to help you keep track of your items by category.
+                        It allows you to organize inventory by creating item types and then adding specific items to each type with details like price and quantity.
+                    </p>
+
+                    <div class="my-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="border rounded-lg p-4 shadow-sm bg-blue-50">
+                            <div class="text-blue-600 text-4xl mb-3 flex justify-center">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-center mb-2">Organize by Categories</h3>
+                            <p class="text-gray-600 text-sm">Create custom item types to categorize your inventory the way that makes sense for your needs.</p>
+                        </div>
+                        
+                        <div class="border rounded-lg p-4 shadow-sm bg-green-50">
+                            <div class="text-green-600 text-4xl mb-3 flex justify-center">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-center mb-2">Track Items</h3>
+                            <p class="text-gray-600 text-sm">Add, edit, and delete items within each category. Monitor prices and quantities with ease.</p>
+                        </div>
+                        
+                        <div class="border rounded-lg p-4 shadow-sm bg-purple-50">
+                            <div class="text-purple-600 text-4xl mb-3 flex justify-center">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-center mb-2">Manage Inventory</h3>
+                            <p class="text-gray-600 text-sm">Keep track of inventory levels by adding new stock or recording used items.</p>
+                        </div>
+                    </div>
+
+                    <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">How to Use</h2>
+                    
+                    <div class="mb-6 border-l-4 border-indigo-500 pl-4 py-2">
+                        <h3 class="font-medium text-lg text-indigo-600">Creating Item Types</h3>
+                        <p class="text-gray-600">Start by creating item types on the home page. These could be categories like "Office Supplies," "Kitchen Items," or "Electronics."</p>
+                    </div>
+                    
+                    <div class="mb-6 border-l-4 border-indigo-500 pl-4 py-2">
+                        <h3 class="font-medium text-lg text-indigo-600">Adding Items</h3>
+                        <p class="text-gray-600">Click on any item type to view its dashboard. From there, you can add specific items with details like name, price per item, and quantity.</p>
+                    </div>
+                    
+                    <div class="mb-6 border-l-4 border-indigo-500 pl-4 py-2">
+                        <h3 class="font-medium text-lg text-indigo-600">Managing Inventory</h3>
+                        <p class="text-gray-600">When you use items or add more stock, simply edit the item entry. The system will calculate the new quantity based on what was used and what was added.</p>
+                    </div>
+
+                    <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Technical Details</h2>
+                    <p>This application is built with:</p>
+                    <ul class="list-disc pl-5 mb-4 space-y-2">
+                        <li><span class="font-medium">Node.js and Express</span> - Backend server and routing</li>
+                        <li><span class="font-medium">MongoDB</span> - Database for storing item types and items</li>
+                        <li><span class="font-medium">EJS</span> - Templating engine for rendering views</li>
+                        <li><span class="font-medium">Tailwind CSS</span> - Styling and responsive design</li>
+                    </ul>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-8">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-lightbulb text-yellow-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-yellow-800">Tip</h3>
+                                <div class="text-sm text-yellow-700">
+                                    <p>For the best experience, regularly back up your data and keep your inventory updated as items are used or new stock arrives.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm">&copy; 2025 Inventory Manager. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="/" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-home"></i>
+                        <span class="ml-1">Home</span>
+                    </a>
+                    <a href="/about" class="text-gray-300 hover:text-white">
+                        <i class="fas fa-info-circle"></i>
+                        <span class="ml-1">About</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
